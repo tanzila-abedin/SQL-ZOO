@@ -243,6 +243,90 @@ team2,
   SUM(CASE WHEN teamid=team2 THEN 1 ELSE 0 END) AS score2
   FROM game JOIN goal ON matchid = id GROUP BY mdate,matchid,team1,team2
 ORDER BY mdate,matchid,team1,team2
+
+-- More JOIN operations
+
+SELECT id, title
+ FROM movie
+ WHERE yr=1962
+
+SELECT yr
+FROM movie
+WHERE title ='Citizen Kane'
+
+SELECT id,title,yr
+FROM movie
+WHERE title LIKE 'star trek%' ORDER BY yr
+
+SELECT actor.id FROM movie
+JOIN actor ON (movie.id = actor.id)
+WHERE name = 'Glenn Close'
+
+SELECT id
+FROM movie
+WHERE title = 'Casablanca'
+
+SELECT name FROM casting
+JOIN actor ON casting.actorid = actor.id
+WHERE movieid = (SELECT id
+FROM movie
+WHERE title = 'Casablanca') and casting.actorid =actor.id
+
+SELECT name FROM casting
+JOIN actor ON casting.actorid = actor.id
+WHERE movieid = (SELECT id
+FROM movie
+WHERE title = 'Alien') and casting.actorid =actor.id
+
+SELECT DISTINCT title FROM movie
+JOIN casting ON movieid = movie.id
+JOIN actor ON casting.actorid = actor.id
+WHERE actor.name = 'Harrison Ford'
+
+SELECT DISTINCT title FROM movie
+JOIN casting ON movieid = movie.id
+JOIN actor ON casting.actorid = actor.id
+WHERE actor.name = 'Harrison Ford'
+AND ord <> 1
+
+SELECT DISTINCT title,name FROM movie
+JOIN casting ON movieid = movie.id
+JOIN actor ON casting.actorid = actor.id
+WHERE yr = 1962
+AND ord = 1
+
+SELECT yr,COUNT(title) FROM
+  movie JOIN casting ON movie.id=movieid
+        JOIN actor   ON actorid=actor.id
+WHERE name='Doris Day'
+GROUP BY yr
+HAVING COUNT(title) > 1
+
+SELECT DISTINCT title,name FROM movie
+JOIN casting ON movieid = movie.id
+JOIN actor ON casting.actorid = actor.id
+WHERE ord = 1 AND movieid IN (SELECT movieid FROM casting JOIN actor ON actorid=id WHERE name = 'Julie Andrews')
+
+SELECT DISTINCT name
+FROM actor
+JOIN casting on actorid =actor.id
+GROUP BY name,ord
+HAVING COUNT(name) >= 15 AND ord = 1
+
+SELECT title, COUNT(movieid)
+FROM movie
+JOIN casting ON casting.movieid = movie.id
+WHERE yr = 1978
+GROUP BY movieid,title
+ORDER BY COUNT(movieid) DESC ,title
+
+SELECT name From actor
+WHERE id IN (
+SELECT actorid FROM casting
+WHERE movieid IN(
+SELECT movieid FROM casting
+JOIN actor ON actor.id = casting.actorid
+WHERE name = 'Art Garfunkel')) AND name <> 'Art Garfunkel' ORDER BY name
                     
                     
                     
