@@ -458,27 +458,3 @@ SELECT a.company, a.num, stopa.name, stopb.name
   JOIN stops stopb ON (b.stop=stopb.id)
  WHERE stopa.name='Tollcross'
 
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
