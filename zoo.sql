@@ -117,9 +117,56 @@ SELECT winner,subject
  WHERE yr=1984
  ORDER BY subject IN ('Physics','Chemistry'),subject,winner
  
+--  SELECT within SELECT Tutorial
+
+SELECT name 
+  FROM world
+WHERE population >
+     (SELECT population 
+       FROM world
+      WHERE name='Russia')
+     
+SELECT name
+ FROM world 
+WHERE GDP/Population > (
+  SELECT GDP/Population 
+   FROM world
+  WHERE name = 'United Kingdom') AND continent = 'Europe'
+
+SELECT name,continent
+FROM world
+WHERE continent IN (
+(SELECT continent FROM world WHERE name = 'Argentina'),
+(SELECT continent FROM world WHERE name = 'Australia')
+)
+ORDER BY name IN ('Argentine'),name,continent
  
+SELECT name,population 
+ FROM world
+WHERE population > (
+ SELECT population 
+  FROM world
+ WHERE name = 'Canada') AND population < (
+ SELECT population 
+  FROM world
+ WHERE name = 'Poland') 
+
+SELECT name,
+       CONCAT(ROUND(100*population/(SELECT population FROM world WHERE name = 'Germany')),'%') 
+ FROM world 
+WHERE continent = 'Europe'
+                    
+SELECT name 
+ FROM world 
+WHERE gdp > (SELECt MAX(gdp) FROM world WHERE continent = 'Europe')
  
- 
- 
- 
- 
+SELECT continent, name, area FROM world x
+  WHERE area >= ALL
+    (SELECT area 
+     FROM world y
+     WHERE y.continent=x.continent AND area>0)
+                    
+SELECT continent, name FROM world x
+  WHERE name <= ALL
+    (SELECT name FROM world y
+     WHERE y.continent=x.continent AND area>0) 
